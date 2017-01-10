@@ -17,6 +17,7 @@ deploy:
   provider: s3
   bucket: aws-lambda-bins
   acl: public_read
+  skip_cleanup: true
   local_dir: dest
 notifications:
   email: false
