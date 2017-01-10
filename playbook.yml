@@ -1,0 +1,39 @@
+- name: git
+  hosts: all
+  gather_facts: False
+  tasks:
+    - name: install packages
+      become: "{{ build_type == 'amazon-ebs' }}"
+      yum: name={{ item }} state=present
+      with_items:
+        - gcc
+        - autoconf
+        - openssl-devel
+        - curl-devel
+        - expat-devel
+        - perl-ExtUtils-MakeMaker
+        - gettext
+    - name: clean yum cache
+      become: "{{ build_type == 'amazon-ebs' }}"
+      command: yum clean all
+    - name: download git tarball
+      get_url:
+        url: https://github.com/git/git/archive/v{{ version }}.tar.gz
+        dest: .
+    - name: unarchive git tarball
+      command: tar xzf git-{{ version }}.tar.gz
+    - name: create install dir
+      file: path=/tmp/{{ usr_dir }} state=directory
+    - name: install git
+      command: " {{ item }} chdir=git-{{ version }} "
+      with_items:
+        - autoconf
+        - ./configure --prefix=/tmp/{{ usr_dir }} --with-curl
+        - make install
+    - name: archive installed git dir
+      command: tar czf dest.tar.gz -C /tmp {{ usr_dir }}
+    - name: clean up
+      file: path={{ item }} state=absent
+      with_items:
+        - git-{{ version }}.tar.gz
+        - git-{{ version }}

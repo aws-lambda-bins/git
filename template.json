@@ -1,0 +1,47 @@
+{
+  "variables": {
+    "version": "2.11.0",
+    "usr_dir": "usr"
+  },
+  "builders": [
+    {
+      "type": "docker",
+      "image": "amazonlinux",
+      "commit": true
+    },
+    {
+      "type": "amazon-ebs",
+      "region": "ap-northeast-1",
+      "source_ami": "ami-374db956",
+      "instance_type": "m3.medium",
+      "ssh_username": "ec2-user",
+      "ami_name": "aws-lambda-bins-git-{{user `version`}}",
+      "force_deregister": true
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "ansible",
+      "playbook_file": "./playbook.yml",
+      "extra_arguments": [
+        "--extra-vars",
+        "version={{user `version`}} usr_dir={{user `usr_dir`}} build_type={{build_type}}"
+      ]
+    },
+    {
+      "type": "file",
+      "source": "dest.tar.gz",
+      "destination": "./dest/git-{{user `version`}}.tar.gz",
+      "direction": "download",
+      "only": ["amazon-ebs"]
+    }
+  ],
+  "post-processors": [
+    {
+      "type": "docker-tag",
+      "repository": "aws_lambda_bins/git",
+      "tag": "{{user `version`}}",
+      "only": ["docker"]
+    }
+  ]
+}

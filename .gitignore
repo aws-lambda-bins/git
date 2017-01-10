@@ -1,0 +1,11 @@
+dest/
+
+# Ansible
+*.retry
+
+# Terraform
+*.tfstate
+*.tfstate.backup
+
+# direnv
+.envrc
