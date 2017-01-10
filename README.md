@@ -7,13 +7,20 @@
 ## Manual Build
 
 ```sh
-$ packer build -only="amazo-ebs" template.json
+$ packer build -only=amazo-ebs template.json
+```
+
+## Development
+
+### Build
+
+```sh
+$ packer build -only=docker template.json
 ```
 
 ### Test
 
 ```sh
-$ packer build -only="docker" template.json
 $ bundle install
 $ rake
 ```
