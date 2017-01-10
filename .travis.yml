@@ -1,5 +1,8 @@
 sudo: required
 language: ruby
+env:
+  global:
+    secure: opC9w/z61FTN0LPkBudacvpY2VN7+fvLR4IktoJ/e+oHxdi07Elr+JWDgowX0BxlYc2oe5jLldft4udydyhDHJg58U5H2BByY8lBVhuOQ3A8m5Xodw9qkoMdA+Vt7CuRmVIJwuMbx7kWP4qIGfi5wOMehcwMNHKhQiN0CqsuqzEGUQK4hAIU+VKtnUlkKvqRIybX6iTx3JTVfVMo+vIqACtkY10byGtjbyJGeVHXIBbRFdfVpo7j8iISBvo07OIqc/o5QwhZ/2WYOlrlBv6I13W5yTbknTXh2LZi9Fvcov+zAqaMpLbIwNknCZd23/MT5HrrpAE3XnSgpa2NV6BH/fMp8eogpQIcJuy6az1uR4F6HfzC5oeAId1dxmWEUkxUgTtLWn5f88U0QRzY92SxQlfQuMEy1TLdL1nATEWI08jFUYq2txhoPRcHE0dKnDop0zvCOxeyhhyfSg5ICX310FygMLkgjnI0mwfJXPpvZg2nQ3k1zFG3DZZsv7oaIVQJ9ukemL0m4tIj+M62uT1Qo0yyexG6r+pCL9sU12tudjfre9KIHv71QGW5+tk8WAZc2oC3y2Wm6wWA+/kW2w58Vm9D/81bN5RMsTW/SFSQSQqw97YuFOyv5bmIN4ByDqRaq1xfmr/HT2Eax1QuU9VNmCJQllSFDLSxApa1Hlgc1ng=
 cache:
 - bundler
 - pip
@@ -7,14 +10,13 @@ services:
 - docker
 before_install:
 - wget https://releases.hashicorp.com/packer/0.12.1/packer_0.12.1_linux_amd64.zip
-- unzip packer_0.12.1_linux_amd64.zip
+- unzip -d ~/bin packer_0.12.1_linux_amd64.zip
 - pip install ansible
-before_script: "./packer build -only=docker template.json"
+before_script: "./bin/ci.sh"
 deploy:
   provider: s3
-  access_key_id: AKIAIUQE43ZSAVFUWOQQ
-  secret_access_key:
-    secure: EecvjGhiE7kYrfb3rqzHr+tvmWDrJo6bxv41GdAq7rvnq/X6M3noaari5mmzjndFeT+E0aer66YnOv2/gyhZNdjbbbqdUGC6DzvtUHJ/XbddZpXARN18vaCu0aaaLRSwqzVZl6w/jycKUZVt4DFSo53iVlZCau3xMoh2faU0aAleCuS6smw2FzBEJO7lD6nAqinGMTlqnRkxFKeDiy0JqRqlyMUsfPjwiVU8BlFbzBGWyg+oYKexzeTw7U0tm7KmHvMEFO1KKfqytEA3YhddLJ2jIrb/IG5Ox16Ie2yn++54NiE6MukQ1rwihlSfHfsrE/FkKOyr/0NLnM9/cOh86fRczYHVpr7UHROPFiajysdPmPmxPsqj7vZRANEYlbvzhMKwb5xSLeOn2gmsq2Ev+tnqYn7ove1F4kcOH25w/F3GsoPzbe2kFsXAYD8VujD2dyBkFb4cewtUZILr8E2s3BQx24TGA5ZBfUiWfOxPcAnrCCuQSPhpjNGJr5hCmo7AONxJrHPb2zwbc5NNnw8/MG/CjAYiyh0Bagnoxl9mgIPX9gcp50cpgha6miZ1U9wHPX7gWV1jvWP3nFUvjN3MrKElMLNxutTTPDQUGB4x1EG1UmwHK9khKr5FvXCTYrrUr40fpyxuzW/ipm1HaMa9L22EB3qE0QJAY95k+AgvQlA=
   bucket: aws-lambda-bins
   acl: public_read
   local_dir: dest
+notifications:
+  email: false
