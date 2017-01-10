@@ -1,0 +1,20 @@
+sudo: required
+language: ruby
+cache:
+- bundler
+- pip
+services:
+- docker
+before_install:
+- wget https://releases.hashicorp.com/packer/0.12.1/packer_0.12.1_linux_amd64.zip
+- unzip packer_0.12.1_linux_amd64.zip
+- pip install ansible
+before_script: "./packer build -only=docker template.json"
+deploy:
+  provider: s3
+  access_key_id: AKIAIUQE43ZSAVFUWOQQ
+  secret_access_key:
+    secure: EecvjGhiE7kYrfb3rqzHr+tvmWDrJo6bxv41GdAq7rvnq/X6M3noaari5mmzjndFeT+E0aer66YnOv2/gyhZNdjbbbqdUGC6DzvtUHJ/XbddZpXARN18vaCu0aaaLRSwqzVZl6w/jycKUZVt4DFSo53iVlZCau3xMoh2faU0aAleCuS6smw2FzBEJO7lD6nAqinGMTlqnRkxFKeDiy0JqRqlyMUsfPjwiVU8BlFbzBGWyg+oYKexzeTw7U0tm7KmHvMEFO1KKfqytEA3YhddLJ2jIrb/IG5Ox16Ie2yn++54NiE6MukQ1rwihlSfHfsrE/FkKOyr/0NLnM9/cOh86fRczYHVpr7UHROPFiajysdPmPmxPsqj7vZRANEYlbvzhMKwb5xSLeOn2gmsq2Ev+tnqYn7ove1F4kcOH25w/F3GsoPzbe2kFsXAYD8VujD2dyBkFb4cewtUZILr8E2s3BQx24TGA5ZBfUiWfOxPcAnrCCuQSPhpjNGJr5hCmo7AONxJrHPb2zwbc5NNnw8/MG/CjAYiyh0Bagnoxl9mgIPX9gcp50cpgha6miZ1U9wHPX7gWV1jvWP3nFUvjN3MrKElMLNxutTTPDQUGB4x1EG1UmwHK9khKr5FvXCTYrrUr40fpyxuzW/ipm1HaMa9L22EB3qE0QJAY95k+AgvQlA=
+  bucket: aws-lambda-bins
+  acl: public_read
+  local_dir: dest
