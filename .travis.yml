@@ -13,6 +13,7 @@ before_install:
   - unzip -d ~/bin packer_0.12.1_linux_amd64.zip
   - pip install ansible
 before_script: "./bin/ci.sh"
+before_deploy: "mv dest/git-* dest/git-${TRAVIS_BRANCH}.tar.gz"
 deploy:
   provider: s3
   bucket: aws-lambda-bins
