@@ -4,14 +4,14 @@ env:
   global:
     secure: opC9w/z61FTN0LPkBudacvpY2VN7+fvLR4IktoJ/e+oHxdi07Elr+JWDgowX0BxlYc2oe5jLldft4udydyhDHJg58U5H2BByY8lBVhuOQ3A8m5Xodw9qkoMdA+Vt7CuRmVIJwuMbx7kWP4qIGfi5wOMehcwMNHKhQiN0CqsuqzEGUQK4hAIU+VKtnUlkKvqRIybX6iTx3JTVfVMo+vIqACtkY10byGtjbyJGeVHXIBbRFdfVpo7j8iISBvo07OIqc/o5QwhZ/2WYOlrlBv6I13W5yTbknTXh2LZi9Fvcov+zAqaMpLbIwNknCZd23/MT5HrrpAE3XnSgpa2NV6BH/fMp8eogpQIcJuy6az1uR4F6HfzC5oeAId1dxmWEUkxUgTtLWn5f88U0QRzY92SxQlfQuMEy1TLdL1nATEWI08jFUYq2txhoPRcHE0dKnDop0zvCOxeyhhyfSg5ICX310FygMLkgjnI0mwfJXPpvZg2nQ3k1zFG3DZZsv7oaIVQJ9ukemL0m4tIj+M62uT1Qo0yyexG6r+pCL9sU12tudjfre9KIHv71QGW5+tk8WAZc2oC3y2Wm6wWA+/kW2w58Vm9D/81bN5RMsTW/SFSQSQqw97YuFOyv5bmIN4ByDqRaq1xfmr/HT2Eax1QuU9VNmCJQllSFDLSxApa1Hlgc1ng=
 cache:
-- bundler
-- pip
+  - bundler
+  - pip
 services:
-- docker
+  - docker
 before_install:
-- wget https://releases.hashicorp.com/packer/0.12.1/packer_0.12.1_linux_amd64.zip
-- unzip -d ~/bin packer_0.12.1_linux_amd64.zip
-- pip install ansible
+  - wget https://releases.hashicorp.com/packer/0.12.1/packer_0.12.1_linux_amd64.zip
+  - unzip -d ~/bin packer_0.12.1_linux_amd64.zip
+  - pip install ansible
 before_script: "./bin/ci.sh"
 deploy:
   provider: s3
