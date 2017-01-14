@@ -22,5 +22,8 @@ deploy:
   local_dir: dest
   upload-dir: git
   region: ap-northeast-1
+  on:
+    all_branches: true
+    condition: '"${TRAVIS_BRANCH}" = "master" || -n "${TRAVIS_TAG}"'
 notifications:
   email: false
