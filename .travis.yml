@@ -20,5 +20,6 @@ deploy:
   skip_cleanup: true
   local_dir: dest
   upload-dir: git
+  region: ap-northeast-1
 notifications:
   email: false
