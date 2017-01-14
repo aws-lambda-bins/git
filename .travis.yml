@@ -19,5 +19,6 @@ deploy:
   acl: public_read
   skip_cleanup: true
   local_dir: dest
+  upload-dir: git
 notifications:
   email: false
