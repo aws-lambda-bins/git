@@ -1,7 +1,6 @@
 {
   "variables": {
-    "version": "2.11.0",
-    "usr_dir": "usr"
+    "version": "2.11.0"
   },
   "builders": [
     {
@@ -25,7 +24,7 @@
       "playbook_file": "./playbook.yml",
       "extra_arguments": [
         "--extra-vars",
-        "version={{user `version`}} usr_dir={{user `usr_dir`}} build_type={{build_type}}"
+        "version={{user `version`}} build_type={{build_type}}"
       ]
     },
     {

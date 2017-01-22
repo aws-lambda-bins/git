@@ -2,8 +2,11 @@
   hosts: all
   gather_facts: False
   tasks:
+    - name: set is_amazon_ebs
+      set_fact:
+        is_amazon_ebs: "{{ build_type == 'amazon-ebs' }}"
     - name: install packages
-      become: "{{ build_type == 'amazon-ebs' }}"
+      become: "{{ is_amazon_ebs }}"
       yum: name={{ item }} state=present
       with_items:
         - gcc
@@ -14,26 +17,22 @@
         - perl-ExtUtils-MakeMaker
         - gettext
     - name: clean yum cache
-      become: "{{ build_type == 'amazon-ebs' }}"
+      become: "{{ is_amazon_ebs }}"
       command: yum clean all
-    - name: download git tarball
-      get_url:
-        url: https://github.com/git/git/archive/v{{ version }}.tar.gz
-        dest: .
     - name: unarchive git tarball
-      command: tar xzf git-{{ version }}.tar.gz
-    - name: create install dir
-      file: path=/tmp/{{ usr_dir }} state=directory
+      unarchive:
+        src: https://github.com/git/git/archive/v{{ version }}.tar.gz
+        dest: .
+        remote_src: True
     - name: install git
       command: " {{ item }} chdir=git-{{ version }} "
       with_items:
         - autoconf
-        - ./configure --prefix=/tmp/{{ usr_dir }} --with-curl
+        - ./configure --prefix=/tmp/usr --with-curl
         - make install
     - name: archive installed git dir
-      command: tar czf dest.tar.gz -C /tmp {{ usr_dir }}
-    - name: clean up
-      file: path={{ item }} state=absent
-      with_items:
-        - git-{{ version }}.tar.gz
-        - git-{{ version }}
+      command: tar czf dest.tar.gz -C /tmp usr
+    - name: clean up git source dir
+      file:
+        path: git-{{ version }}
+        state: absent
